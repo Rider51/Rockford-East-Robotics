@@ -59,7 +59,6 @@ public class AutonomousMode {
             //Run for three seconds
             leftMotor.setPower(0.6);
             rightMotor.setPower(0.6);
-            //runtime.seconds();
             runtime.seconds() < 3.0;
 
             //Turn off motors
@@ -74,12 +73,12 @@ public class AutonomousMode {
             telemetry.addData("Status", "Running: " + runtime.toString());
         }
 
-        /*
+        @Override
+        public void stop() {
+         /*
          * Code to run ONCE after the driver hits STOP
          * Probably reset things, like beacon-pusher and thrower
          */
-        @Override
-        public void stop() {
         }
 
     }
