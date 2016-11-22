@@ -14,10 +14,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class AutonomousMode {
 
     @Autonomous(name = "AutonomousOP", group="Iterative Opmode")
-    @Disabled
+    //Disabled
     public class OpMode_Iterative extends OpMode
     {
-        /* Declare OpMode members. */
+        /* Declare AutonomousMode members. */
         private ElapsedTime runtime = new ElapsedTime();
 
         private DcMotor leftMotor = null;
@@ -33,9 +33,8 @@ public class AutonomousMode {
         /* Initialize the hardware variables.
          * Make sure names correspond with names on app
          */
-            leftMotor  = hardwareMap.dcMotor.get("left motor");
-            rightMotor = hardwareMap.dcMotor.get("right motor");
-
+            leftMotor  = hardwareMap.dcMotor.get("left_motor");
+            rightMotor = hardwareMap.dcMotor.get("right_motor");
 
 
             // eg: Set the drive motor directions:
@@ -45,31 +44,34 @@ public class AutonomousMode {
             telemetry.addData("Status", "Initialized");
         }
 
-        /*
-         * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-         */
+
         @Override
         public void init_loop() {
+            //Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
+
         }
 
-        /*
-         * Code to run ONCE when the driver hits PLAY
-         */
         @Override
         public void start() {
+            //Code to run ONCE when the driver hits PLAY
             runtime.reset();
+
+            //Run for three seconds
+            leftMotor.setPower(0.6);
+            rightMotor.setPower(0.6);
+            //runtime.seconds();
+            runtime.seconds() < 3.0;
+
+            //Turn off motors
+            leftMotor.setPower(0);
+            rightMotor.setPower(0)
         }
 
-        /*
-         * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-         */
         @Override
         public void loop() {
-            telemetry.addData("Status", "Running: " + runtime.toString());
+            //Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
 
-            // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
-            leftMotor.setPower(-gamepad1.left_stick_y);
-            rightMotor.setPower(-gamepad1.right_stick_y);
+            telemetry.addData("Status", "Running: " + runtime.toString());
         }
 
         /*
