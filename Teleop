@@ -64,27 +64,20 @@ public class Teleop extends LinearOpMode {
     DcMotor ball_collector = null;
     DcMotor ball_shooter = null;
     static final double FORWARD = 0.6;
-    /*
-        static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
-        static final int    CYCLE_MS    =   50;     // period of each cycle
-        static final double MAX_POS     =  1.0;     // Maximum rotational position
-        static final double MIN_POS     =  0.0;     // Minimum rotational position
-        static final double MID_POS     =  0.5;
-    */
-    // Define class members
+
+    static final double INCREMENT   = 0.05;     // amount to slew servo each CYCLE_MS cycle
+    static final int    CYCLE_MS    =   50;     // period of each cycle
+    static final double MAX_POS     =  1.0;     // Maximum rotational position
+    static final double MIN_POS     =  0.0;     // Minimum rotational position
+    double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
+    boolean rampUp = true;
     Servo servoArm;
-    // double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
-    //boolean rampUp = true;
 
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        /* eg: Initialize the hardware variables. Note that the strings used here as parameters
-         * to 'get' must correspond to the names assigned during the robot configuration
-         * step (using the FTC Robot Controller app on the phone).
-         */
         left_motor = hardwareMap.dcMotor.get("left_motor");
         right_motor = hardwareMap.dcMotor.get("right_motor");
         ball_collector = hardwareMap.dcMotor.get("ball_system");
@@ -97,8 +90,7 @@ public class Teleop extends LinearOpMode {
         ball_shooter.setDirection(DcMotor.Direction.FORWARD);
         ball_collector.setDirection(DcMotor.Direction.REVERSE);
 
-        servoArm.setPosition(0.0);
-
+        servoArm.setPosition(0.0); //Arm will reset to Position 0 when "INT" is hit.
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -107,6 +99,7 @@ public class Teleop extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Servo Position", "%5.2f", position);
             telemetry.update();
 
             //Driving Code
@@ -115,23 +108,30 @@ public class Teleop extends LinearOpMode {
             //Ball System Code
             ball_collector.setPower(-gamepad2.right_stick_y);
 
-            //Untested Servo Code
+            //Servo Code
             if (gamepad2.dpad_up) {
-
-                servoArm.setPosition(1.0);
-
-            } else if (gamepad2.dpad_down) {
-
-                servoArm.setPosition(0.0);
-
-            } else if (gamepad2.dpad_right){
-
-                servoArm.setPosition(0.5);
+                // Extends the arm out to max distance.
+                position += INCREMENT ;
+                if (position >= MAX_POS ) {
+                    position = MAX_POS;
+                    rampUp = !rampUp;
+                }
+            }
+            else if (gamepad2.dpad_down){
+                // Brings the arm to min distance.
+                position -= INCREMENT ;
+                if (position <= MIN_POS ) {
+                    position = MIN_POS;
+                    rampUp = !rampUp;  // Switch ramp direction
+                }
             }
 
 
+            servoArm.setPosition(position);
+            sleep(CYCLE_MS);
+            idle();
 
-            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+
         }
     }
 }
