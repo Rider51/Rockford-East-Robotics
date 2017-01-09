@@ -41,13 +41,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
-   _________  _______   ________  _____ ______          ________   ________  ________  ________
+ _________  _______   ________  _____ ______          ________   ________  ________  ________
  |\___   ___\\  ___ \ |\   __  \|\   _ \  _   \        |\   __  \ |\_____  \|\   __  \|\   __  \
  \|___ \  \_\ \   __/|\ \  \|\  \ \  \\\__\ \  \       \ \  \|\  \ \|___/  /\ \  \|\  \ \  \|\  \
-      \ \  \ \ \  \_|/_\ \   __  \ \  \\|__| \  \       \ \   __  \    /  / /\ \  \\\  \ \   __  \
-       \ \  \ \ \  \_|\ \ \  \ \  \ \  \    \ \  \       \ \  \|\  \  /  / /  \ \  \\\  \ \  \|\  \
-        \ \__\ \ \_______\ \__\ \__\ \__\    \ \__\       \ \_______\/__/ /    \ \_______\ \_______\
-         \|__|  \|_______|\|__|\|__|\|__|     \|__|        \|_______||__|/      \|_______|\|_______|
+ \ \  \ \ \  \_|/_\ \   __  \ \  \\|__| \  \       \ \   __  \    /  / /\ \  \\\  \ \   __  \
+ \ \  \ \ \  \_|\ \ \  \ \  \ \  \    \ \  \       \ \  \|\  \  /  / /  \ \  \\\  \ \  \|\  \
+ \ \__\ \ \_______\ \__\ \__\ \__\    \ \__\       \ \_______\/__/ /    \ \_______\ \_______\
+ \|__|  \|_______|\|__|\|__|\|__|     \|__|        \|_______||__|/      \|_______|\|_______|
 
 
  */
@@ -81,7 +81,7 @@ public class Teleop extends LinearOpMode {
         left_motor = hardwareMap.dcMotor.get("left_motor");
         right_motor = hardwareMap.dcMotor.get("right_motor");
         ball_collector = hardwareMap.dcMotor.get("ball_system");
-        ball_shooter = hardwareMap.dcMotor.get("ball_system");
+        ball_shooter = hardwareMap.dcMotor.get("motor_arm");
         servoArm = hardwareMap.servo.get("arm");
 
 
@@ -117,13 +117,20 @@ public class Teleop extends LinearOpMode {
                     rampUp = !rampUp;
                 }
             }
-            else if (gamepad2.dpad_down){
+             if (gamepad2.dpad_down){
                 // Brings the arm to min distance.
                 position -= INCREMENT ;
                 if (position <= MIN_POS ) {
                     position = MIN_POS;
                     rampUp = !rampUp;  // Switch ramp direction
                 }
+            }
+
+            if (gamepad2.a){
+                ball_shooter.setPower(1);
+            }
+            else {
+                ball_shooter.setPower(0);
             }
 
 
@@ -135,4 +142,3 @@ public class Teleop extends LinearOpMode {
         }
     }
 }
-
