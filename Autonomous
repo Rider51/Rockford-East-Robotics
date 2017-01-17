@@ -10,11 +10,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /**
  * Created by Kay on 10/26/16.
  */
-
-public class AutonomousMode {
-
     @Autonomous(name = "AutonomousOP", group="Iterative Opmode")
     //Disabled
+public class AutonomousMode {
+
     public class OpMode_Iterative extends OpMode
     {
         /* Declare AutonomousMode members. */
